@@ -285,6 +285,17 @@ namespace Microsoft.Diagnostics.NETCore.Client
             return transportName;
         }
 
+        private static void ListDirectoryFiles(string path)
+        {
+            System.Console.WriteLine($"ListDirectoryFiles: Listing ALL files in '{path}':");
+            string[] files = Directory.GetFiles(path);
+            System.Console.WriteLine($"Files in directory 'path': {files.Length}");
+            foreach(var f in files)
+            {
+                System.Console.WriteLine($"ListDirectoryFiles: {f}");
+            }
+        }
+
         private static bool TryGetDefaultAddress(int pid, out string defaultAddress)
         {
             defaultAddress = null;
@@ -299,17 +310,17 @@ namespace Microsoft.Diagnostics.NETCore.Client
                 {
                     System.Console.WriteLine($"TryGetDefaultAddress: {IpcRootPath}");
                     System.Console.WriteLine($"TryGetDefaultAddress: {pid}");
-                    System.Console.WriteLine($"TryGetDefaultAddress: delaying for 10 seconds...");
-                    for(int i = 0; i < 10; ++i)
+                    System.Console.WriteLine($"TryGetDefaultAddress: delaying for 3 seconds...");
+                    for(int i = 0; i < 3; ++i)
                     {
                         System.Threading.Thread.Sleep(1000);
                         System.Console.WriteLine($"{i}");
                     }
-                    System.Console.WriteLine($"TryGetDefaultAddress: Listing files in {IpcRootPath}:");
-                    foreach(var f in Directory.GetFiles(IpcRootPath, $"dotnet-diagnostic-{pid}-*-socket"))
-                    {
-                        System.Console.WriteLine($"TryGetDefaultAddress: {f}");
-                    }
+                    System.Console.WriteLine($"TryGetDefaultAddress: Listing ALL files in {IpcRootPath}:");
+                    ListDirectoryFiles(IpcRootPath);
+
+                    System.Console.WriteLine($"TryGetDefaultAddress: Listing ALL files in '/root':");
+                    ListDirectoryFiles("/root");
 
                     defaultAddress = Directory.GetFiles(IpcRootPath, $"dotnet-diagnostic-{pid}-*-socket") // Try best match.
                         .OrderByDescending(f => new FileInfo(f).LastWriteTime)
