@@ -297,12 +297,29 @@ namespace Microsoft.Diagnostics.NETCore.Client
             {
                 try
                 {
+                    System.Console.WriteLine($"TryGetDefaultAddress: {IpcRootPath}");
+                    System.Console.WriteLine($"TryGetDefaultAddress: {pid}");
+                    System.Console.WriteLine($"TryGetDefaultAddress: delaying for 10 seconds...");
+                    for(int i = 0; i < 10; ++i)
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                        System.Console.WriteLine($"{i}");
+                    }
+                    System.Console.WriteLine($"TryGetDefaultAddress: Listing files in {IpcRootPath}:");
+                    foreach(var f in Directory.GetFiles(IpcRootPath, $"dotnet-diagnostic-{pid}-*-socket"))
+                    {
+                        System.Console.WriteLine($"TryGetDefaultAddress: {f}");
+                    }
+
+                    /*
                     defaultAddress = Directory.GetFiles(IpcRootPath, $"dotnet-diagnostic-{pid}-*-socket") // Try best match.
                         .OrderByDescending(f => new FileInfo(f).LastWriteTime)
                         .FirstOrDefault();
+                    */
                 }
-                catch (InvalidOperationException)
+                catch (InvalidOperationException e)
                 {
+                    System.Console.WriteLine($"TryGetDefaultAddress: {e}");
                 }
             }
 
