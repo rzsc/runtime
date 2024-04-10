@@ -311,11 +311,9 @@ namespace Microsoft.Diagnostics.NETCore.Client
                         System.Console.WriteLine($"TryGetDefaultAddress: {f}");
                     }
 
-                    /*
                     defaultAddress = Directory.GetFiles(IpcRootPath, $"dotnet-diagnostic-{pid}-*-socket") // Try best match.
                         .OrderByDescending(f => new FileInfo(f).LastWriteTime)
                         .FirstOrDefault();
-                    */
                 }
                 catch (InvalidOperationException e)
                 {
